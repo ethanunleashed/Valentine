@@ -1,3 +1,4 @@
+/* General Reset */
 * {
   padding: 0;
   margin: 0;
@@ -10,11 +11,13 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #fff5f7;
+  background-color: #fff5f7; /* Soft pink background */
   font-family: "Quicksand", sans-serif;
-  overflow: hidden; /* Prevents scrollbars when button moves */
+  overflow: hidden; /* CRITICAL: Prevents the button from creating scrollbars */
+  position: relative;
 }
 
+/* Main Containers */
 .container {
   text-align: center;
   width: 90%;
@@ -22,19 +25,33 @@ body {
   z-index: 1;
 }
 
+.question-container, .result-container {
+  transition: 0.2s;
+}
+
+/* Media (Videos/GIFs) */
 .local-gif, .gif-result {
   width: 100%;
   max-width: 300px;
   border-radius: 15px;
-  margin-bottom: 2rem;
+  display: block;
+  margin: 0 auto 2rem auto;
 }
 
+/* Text Styling */
 .question {
   font-size: clamp(2rem, 8vw, 3.5rem);
   margin-bottom: 2rem;
   color: #ff54a4;
 }
 
+.result-container h2 {
+  font-size: 3rem;
+  text-align: center;
+  color: #ff54a4;
+}
+
+/* Button Layout */
 .button-container {
   display: flex;
   justify-content: center;
@@ -44,31 +61,92 @@ body {
 }
 
 .btn {
-  padding: 14px 30px;
+  padding: 14px 28px;
   border: none;
   border-radius: 50px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
   background-color: #ff54a4;
   color: white;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
   box-shadow: 0px 4px 15px rgba(255, 107, 129, 0.4);
 }
 
-.no-btn {
-  transition: left 0.1s ease-out, top 0.1s ease-out;
+.btn:hover {
+  background-color: #ffa4b1;
+  transform: scale(1.1);
+  box-shadow: 0px 6px 20px rgba(255, 107, 129, 0.7);
 }
 
-/* Hide results initially */
-.result-container, .cssload-main {
+/* Initial Button Positioning */
+.yes-btn {
+  position: absolute;
+  right: 52%;
+}
+
+.no-btn {
+  position: absolute;
+  left: 52%;
+  transition: left 0.1s ease-out, top 0.1s ease-out; /* Smooth runaway effect */
+  z-index: 10;
+}
+
+/* Initially Hidden Elements */
+.result-container, 
+.cssload-main {
   display: none;
 }
 
-/* --- Heart Loader --- */
+/* --- Heart Loader Animation --- */
 .cssload-main {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-/* ... Keep the rest of your heart keyframes here ... */
+
+.cssload-heart {
+  animation: cssload-heart 2.88s cubic-bezier(0.75, 0, 0.5, 1) infinite;
+  position: relative;
+  font-size: 60px;
+}
+
+.cssload-heartL, .cssload-heartR, .cssload-square {
+  width: 1em;
+  height: 1em;
+  background-color: #ff0000;
+  position: absolute;
+}
+
+.cssload-heartL { 
+  border-radius: 100%; 
+  transform: translate(-28px, -27px); 
+  animation: cssload-heartL 2.88s infinite;
+}
+
+.cssload-heartR { 
+  border-radius: 100%; 
+  transform: translate(28px, -27px); 
+  animation: cssload-heartR 2.88s infinite;
+}
+
+.cssload-square { 
+  transform: rotate(-45deg); 
+  animation: cssload-square 2.88s infinite;
+}
+
+.cssload-shadow {
+  width: 1em;
+  height: 0.24em;
+  background-color: rgb(215, 215, 215);
+  border-radius: 50%;
+  margin: 80px auto 0;
+  animation: cssload-shadow 2.88s infinite;
+}
+
+/* Keyframes */
+@keyframes cssload-square { 50% { border-radius: 100%; transform: scale(0.5) rotate(-45deg); } }
+@keyframes cssload-heart { 50% { transform: rotate(360deg); } 100% { transform: rotate(720deg); } }
+@keyframes cssload-heartL { 60% { transform: scale(0.4) translate(-28px, -27px); } }
+@keyframes cssload-heartR { 40% { transform: scale(0.4) translate(28px, -27px); } }
+@keyframes cssload-shadow { 50% { transform: scale(0.5); } }
