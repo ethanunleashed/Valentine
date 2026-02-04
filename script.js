@@ -1,54 +1,47 @@
 const questionContainer = document.querySelector(".question-container");
 const resultContainer = document.querySelector(".result-container");
+const gifResult = document.querySelector(".gif-result");
 const heartLoader = document.querySelector(".cssload-main");
 const yesBtn = document.querySelector(".js-yes-btn");
 const noBtn = document.querySelector(".js-no-btn");
 
-// Helper to fire confetti
-const fireConfetti = () => {
-  const count = 200;
-  const defaults = { origin: { y: 0.7 } };
+// Function to move the "No" button
+const moveNoButton = (e) => {
+  // Prevent the button from actually being clicked on mobile
+  if (e && e.type === 'touchstart') e.preventDefault();
 
-  function fire(particleRatio, opts) {
-    confetti({ ...defaults, ...opts, particleCount: Math.floor(count * particleRatio) });
-  }
-
-  fire(0.25, { spread: 26, startVelocity: 55 });
-  fire(0.2, { spread: 60 });
-  fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-  fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-  fire(0.1, { spread: 120, startVelocity: 45 });
-};
-
-// Function to move the button
-const moveButton = (e) => {
-  // Prevent default behavior for touch to stop accidental clicks
-  if (e.type === 'touchstart') e.preventDefault();
-
+  // 1. Calculate the available screen space
+  // Subtracting the button size and a 20px margin to keep it on screen
   const maxX = window.innerWidth - noBtn.offsetWidth - 20;
   const maxY = window.innerHeight - noBtn.offsetHeight - 20;
 
+  // 2. Generate random coordinates
   const newX = Math.floor(Math.random() * maxX);
   const newY = Math.floor(Math.random() * maxY);
 
+  // 3. Make the button jump anywhere on the screen
+  noBtn.style.position = "fixed"; // This allows it to leave the 'container'
   noBtn.style.left = `${newX}px`;
   noBtn.style.top = `${newY}px`;
 };
 
-// Runaway "No" button logic for both Mouse and Touch
-noBtn.addEventListener("mouseover", moveButton);
-noBtn.addEventListener("touchstart", moveButton);
+// Listen for both desktop mouse hover and mobile finger touch
+noBtn.addEventListener("mouseover", moveNoButton);
+noBtn.addEventListener("touchstart", moveNoButton);
 
-// "Yes" button logic
+// "Yes" button functionality
 yesBtn.addEventListener("click", () => {
   questionContainer.style.display = "none";
   heartLoader.style.display = "block";
-  
-  fireConfetti();
+
+  // Fire confetti if you included the library in your HTML
+  if (typeof confetti === "function") {
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+  }
 
   setTimeout(() => {
     heartLoader.style.display = "none";
     resultContainer.style.display = "block";
-    fireConfetti(); 
-  }, 2500);
+    if (gifResult) gifResult.play();
+  }, 3000);
 });
