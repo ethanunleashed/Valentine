@@ -5,33 +5,43 @@ const heartLoader = document.querySelector(".cssload-main");
 const yesBtn = document.querySelector(".js-yes-btn");
 const noBtn = document.querySelector(".js-no-btn");
 
-// Updated runaway logic to stay within bounds
+// Function to move the "No" button
 const moveNoButton = (e) => {
+  // Prevent mobile phones from "clicking" the button while it moves
   if (e.type === 'touchstart') e.preventDefault();
 
-  // 1. Use the window size instead of container size for full freedom
-  // 2. Subtract button size so it never peeks off the edge
-  const padding = 20; 
+  // Calculate the max available space on the screen
+  const padding = 20;
   const maxX = window.innerWidth - noBtn.offsetWidth - padding;
   const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-  // 3. Ensure the coordinates are at least 'padding' distance from the top/left
+  // Generate random coordinates within the screen bounds
   const newX = Math.max(padding, Math.floor(Math.random() * maxX));
   const newY = Math.max(padding, Math.floor(Math.random() * maxY));
 
-  // 4. Use 'fixed' so it ignores the parent container's boundaries
+  // Use 'fixed' positioning so it can move anywhere relative to the window
   noBtn.style.position = "fixed";
   noBtn.style.left = `${newX}px`;
   noBtn.style.top = `${newY}px`;
 };
 
+// Add listeners for both mouse (Desktop) and touch (Mobile)
 noBtn.addEventListener("mouseover", moveNoButton);
 noBtn.addEventListener("touchstart", moveNoButton);
 
-// Yes button functionality remains the same
+// Yes button functionality
 yesBtn.addEventListener("click", () => {
   questionContainer.style.display = "none";
-  heartLoader.style.display = "block"; // Changed 'inherit' to 'block' for better support
+  heartLoader.style.display = "block";
+
+  // Trigger confetti if the library is loaded
+  if (window.confetti) {
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  }
 
   setTimeout(() => {
     heartLoader.style.display = "none";
