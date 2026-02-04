@@ -1,64 +1,32 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
 body {
   height: 100vh;
-  display: flex;
+  width: 100vw;
+  display: flex; /* Changed from grid to flex for easier centering */
   justify-content: center;
   align-items: center;
-  background-color: #fff5f7; /* Light pink background */
+  background-color: white;
   font-family: "Quicksand", sans-serif;
-  overflow: hidden; /* Important: keeps the button from creating scrollbars */
+  overflow: hidden; /* CRITICAL: Prevents scrollbars when button moves */
+  position: relative;
 }
 
-.container {
+/* Ensure the question container doesn't trap the button */
+.question-container {
   text-align: center;
-  width: 90%;
-  max-width: 400px;
-}
-
-.local-gif, .gif-result {
-  width: 100%;
-  max-width: 250px;
-  border-radius: 15px;
-  margin-bottom: 2rem;
-}
-
-.question {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: #ff54a4;
+  z-index: 1;
 }
 
 .button-container {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  min-height: 60px;
+  gap: 1.5rem;
+  margin-top: 20px;
   position: relative;
-}
-
-.btn {
-  padding: 12px 30px;
-  border: none;
-  border-radius: 50px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  background-color: #ff54a4;
-  color: white;
-  transition: transform 0.2s, background-color 0.2s;
-  box-shadow: 0px 4px 15px rgba(255, 107, 129, 0.4);
+  height: 50px; /* Gives the buttons space */
 }
 
 .no-btn {
-    transition: left 0.1s ease-out, top 0.1s ease-out;
+  /* Set an initial position that makes sense */
+  transition: left 0.1s ease-out, top 0.1s ease-out;
+  z-index: 10;
 }
-
-.result-container {
-  display: none;
-}
-
-/* --- Keep your heart loader CSS below this --- */
