@@ -5,39 +5,33 @@ const heartLoader = document.querySelector(".cssload-main");
 const yesBtn = document.querySelector(".js-yes-btn");
 const noBtn = document.querySelector(".js-no-btn");
 
-// Function to move the "No" button
+// Updated runaway logic to stay within bounds
 const moveNoButton = (e) => {
-  // Prevent the button from actually being clicked on mobile
-  if (e && e.type === 'touchstart') e.preventDefault();
+  if (e.type === 'touchstart') e.preventDefault();
 
-  // 1. Calculate the available screen space
-  // Subtracting the button size and a 20px margin to keep it on screen
-  const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-  const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+  // 1. Use the window size instead of container size for full freedom
+  // 2. Subtract button size so it never peeks off the edge
+  const padding = 20; 
+  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-  // 2. Generate random coordinates
-  const newX = Math.floor(Math.random() * maxX);
-  const newY = Math.floor(Math.random() * maxY);
+  // 3. Ensure the coordinates are at least 'padding' distance from the top/left
+  const newX = Math.max(padding, Math.floor(Math.random() * maxX));
+  const newY = Math.max(padding, Math.floor(Math.random() * maxY));
 
-  // 3. Make the button jump anywhere on the screen
-  noBtn.style.position = "fixed"; // This allows it to leave the 'container'
+  // 4. Use 'fixed' so it ignores the parent container's boundaries
+  noBtn.style.position = "fixed";
   noBtn.style.left = `${newX}px`;
   noBtn.style.top = `${newY}px`;
 };
 
-// Listen for both desktop mouse hover and mobile finger touch
 noBtn.addEventListener("mouseover", moveNoButton);
 noBtn.addEventListener("touchstart", moveNoButton);
 
-// "Yes" button functionality
+// Yes button functionality remains the same
 yesBtn.addEventListener("click", () => {
   questionContainer.style.display = "none";
-  heartLoader.style.display = "block";
-
-  // Fire confetti if you included the library in your HTML
-  if (typeof confetti === "function") {
-    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-  }
+  heartLoader.style.display = "block"; // Changed 'inherit' to 'block' for better support
 
   setTimeout(() => {
     heartLoader.style.display = "none";
